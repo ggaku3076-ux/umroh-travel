@@ -40,7 +40,7 @@ export default function Hero() {
           {/* FLOATING BADGE */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 border border-white/30 text-xs font-semibold text-white tracking-wide shadow-xs">
             <BadgeCheck className="h-4 w-4 text-brand-orange-light shrink-0" />
-            <span>Layanan Travel & Rental Terbaik Jombang</span>
+            <span>Layanan Umroh & Hajj Premium Terpercaya</span>
           </div>
           
           {/* MAIN HEADING */}
@@ -48,16 +48,17 @@ export default function Hero() {
             id="hero-title" 
             className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.15] font-sans drop-shadow-md"
           >
-            Explore the Beauty of <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
-              Mount Bromo.
+            Ibadah Suci & Perjalanan Khusyu <br className="hidden sm:inline" />
+            <span className="bg-gradient-to-r from-amber-200 via-amber-100 to-white bg-clip-text text-transparent">
+              Ke Tanah Suci Makkah & Madinah.
             </span>
           </h1>
 
           {/* SUBTITLE */}
           <p className="text-sm sm:text-base text-white/90 leading-relaxed max-w-lg font-light drop-shadow-sm">
-            Saksikan keindahan matahari terbit yang menakjubkan, bentangan pasir berbisik yang dramatis, dan petualangan yang tak terlupakan di destinasi paling ikonik Jawa Timur.
+            Wujudkan impian ibadah Umroh dan Haji Anda bersama pembimbing ibadah berpengalaman, hotel berbintang dekat Masjidil Haram, serta pelayanan privat dan nyaman.
           </p>
+
 
           {/* ACTION BUTTONS */}
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
