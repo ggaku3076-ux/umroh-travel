@@ -114,7 +114,7 @@ export default function Chatbot() {
     if (!textToSend) setInputQuery("");
     setIsTyping(true);
 
-    saveSupabaseMessage(sessionId, "user", query);
+    saveSupabaseMessage(sessionId, userMsg);
 
     try {
       const response = await generateAIResponse(query, messages);
@@ -128,7 +128,7 @@ export default function Chatbot() {
       };
 
       setMessages((prev) => [...prev, assistantMsg]);
-      saveSupabaseMessage(sessionId, "assistant", response.text);
+      saveSupabaseMessage(sessionId, assistantMsg);
     } catch (err) {
       const errorMsg: ChatMessage = {
         id: `err_${Date.now()}`,

@@ -20,7 +20,7 @@ export async function createSupabaseChatSession(sessionId: string, userName?: st
     const { error } = await supabase.from("chat_sessions").upsert(
       {
         id: sessionId,
-        user_name: userName || "Tamu Mustika Travel",
+        user_name: userName || "Tamu Soraya Tour",
         updated_at: new Date().toISOString(),
       },
       { onConflict: "id" }
