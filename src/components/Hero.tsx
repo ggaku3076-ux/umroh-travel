@@ -12,7 +12,7 @@ export default function Hero() {
       {/* BACKGROUND IMAGES */}
       <div className="absolute inset-0 hidden lg:block z-0" aria-hidden="true">
         <Image
-          src="/Asset/BACKGROUND_MEKKAH_DESKTOP.webp"
+          src="/Asset/BACKGROUND_MEKKAH_DESKTOP_V2.webp"
           alt="Umroh Travel Desktop Background"
           fill
           priority
@@ -22,7 +22,7 @@ export default function Hero() {
       </div>
       <div className="absolute inset-0 block lg:hidden z-0" aria-hidden="true">
         <Image
-          src="/Asset/BACKGROUND_MEKKAH_MOBILE.webp"
+          src="/Asset/BACKGROUND_MEKKAH_MOBILE_V2.webp"
           alt="Umroh Travel Mobile Background"
           fill
           priority
