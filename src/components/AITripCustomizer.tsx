@@ -42,15 +42,15 @@ export default function AITripCustomizer() {
     }
 
     const dayByDay = [
-      { day: 1, title: "Keberangkatan & Tiba di Jeddah", desc: "Penerbangan direct flight ke Jeddah, proses imigrasi, dan menuju hotel Madinah." },
-      { day: 2, title: "Ziarah Masjid Nabawi & Raudah", desc: "Salat khusyu di Masjid Nabawi, ziarah Makam Rasulullah SAW & Raudah." },
-      { day: 3, title: "Ziarah Kota Madinah", desc: "Ziarah Masjid Quba, Jabal Uhud, Masjid Qiblatain, dan Kebun Kurma." },
-      { day: 4, title: "Ihraam & Menuju Makkah Al-Mukarramah", desc: "Ambil miqat di Bir Ali, perjalanan dengan Kereta Cepat Haramain menuju Makkah, dilanjutkan pelaksanaan Umroh Utama (Tawaf & Sa'i)." },
-      { day: 5, title: "Ibadah Khusyu Makkah", desc: "Memperbanyak salat di depan Ka'bah Masjidil Haram & ikhtikaf." },
-      { day: 6, title: "Ziarah Kota Makkah", desc: "Ziarah Jabal Tsur, Jabal Rahmah, Arafah, Muzdalifah, & Mina." },
-      { day: 7, title: "Tawaf Wada & Persiapan Kepulangan", desc: "Pelaksanaan Tawaf Wada', check-out hotel Makkah, & perjalanan menuju Bandara Jeddah." },
-      { day: 8, title: "Penerbangan Kembali ke Indonesia", desc: "Penerbangan kembali menuju tanah air." },
-      { day: 9, title: "Tiba di Indonesia", desc: "Tiba di tanah air dengan selamat dan meraih predikat Umroh Maqbul." }
+      { day: "Hari 1", title: "Keberangkatan & Tiba di Jeddah", activities: ["Penerbangan direct flight ke Jeddah", "Proses imigrasi & pengurusan bagasi", "Transfer bus AC VIP menuju hotel Madinah"] },
+      { day: "Hari 2", title: "Ziarah Masjid Nabawi & Raudah", activities: ["Salat khusyu di Masjid Nabawi", "Ziarah Makam Rasulullah SAW & Raudah", "Manasik & pembekalan ibadah"] },
+      { day: "Hari 3", title: "Ziarah Kota Madinah", activities: ["Ziarah Masjid Quba & Jabal Uhud", "Kunjungan Masjid Qiblatain", "Belanja di Kebun Kurma Madinah"] },
+      { day: "Hari 4", title: "Ihraam & Menuju Makkah Al-Mukarramah", activities: ["Niat Ihram & Miqat di Bir Ali", "Perjalanan Kereta Cepat Haramain ke Makkah", "Pelaksanaan Umroh Utama (Tawaf & Sa'i)"] },
+      { day: "Hari 5", title: "Ibadah Khusyu Makkah", activities: ["Memperbanyak salat fardu & sunnah di Masjidil Haram", "Ikhtikaf & berdoa di depan Ka'bah"] },
+      { day: "Hari 6", title: "Ziarah Kota Makkah", activities: ["Ziarah Jabal Tsur & Jabal Rahmah", "Kunjungan Padang Arafah, Muzdalifah, & Mina"] },
+      { day: "Hari 7", title: "Tawaf Wada & Persiapan Kepulangan", activities: ["Pelaksanaan Tawaf Wada'", "Check-out hotel Makkah", "Transfer bus VIP ke Bandara Jeddah"] },
+      { day: "Hari 8", title: "Penerbangan Kembali ke Indonesia", activities: ["Penerbangan langsung menuju Indonesia", "Pelayanan konsumsi penuh selama di pesawat"] },
+      { day: "Hari 9", title: "Tiba di Indonesia", activities: ["Tiba di tanah air dengan selamat", "Penyerahan air zam-zam & kepulangan ke rumah"] }
     ];
 
     return {
