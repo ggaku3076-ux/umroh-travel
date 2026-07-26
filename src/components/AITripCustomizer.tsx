@@ -66,13 +66,21 @@ export default function AITripCustomizer() {
     setIsGeneratingPdf(true);
     try {
       await generateItineraryPDF({
+        title: "Brosur & Itinerary Resmi Soraya Tour",
         destination,
         duration,
-        passengers,
-        vehicle: tripCalculation.hotelRecommendation,
-        totalPrice: tripCalculation.totalPrice,
+        passengerCount: passengers,
+        tripStyle: tripStyle.toUpperCase(),
         pricePerPerson: tripCalculation.pricePerPerson,
+        totalPrice: tripCalculation.totalPrice,
         downPayment: tripCalculation.downPayment,
+        recommendedVehicle: tripCalculation.hotelRecommendation,
+        highlights: [
+          "Izin Resmi PPIU Kemenag RI",
+          "Akomodasi Bintang 5 Depan Masjidil Haram & Nabawi",
+          "Pembimbing Ibadah Ustaz Mutawwif Sesuai Sunnah",
+          "Kereta Cepat Haramain & Bus VIP Full AC"
+        ],
         dayByDay: tripCalculation.dayByDay,
       });
     } catch (err) {
