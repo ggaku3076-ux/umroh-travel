@@ -68,14 +68,14 @@ export default function PaketSection() {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 pt-8">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-orange/10 text-xs font-bold uppercase tracking-widest text-brand-orange">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-xs font-bold uppercase tracking-widest text-amber-600 border border-amber-500/20">
             <BadgeCheck className="h-3.5 w-3.5" />
-            Destinasi Populer
+            Layanan Ibadah VIP
           </span>
 
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark mt-3 font-nunito">Paket Wisata Mustika Travel</h2>
-          <p className="text-slate-500 mt-4 text-base font-light leading-relaxed">
-            Temukan berbagai rute pilihan terbaik dengan harga kompetitif dan fasilitas lengkap untuk liburan Anda.
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark mt-3 font-nunito">Paket Umroh & Haji Soraya Tour</h2>
+          <p className="text-stone-600 mt-4 text-base font-light leading-relaxed">
+            Pilihan paket ibadah Umroh Reguler, Umroh Plus Turki/Aqsa, dan Haji Khusus dengan pelayanan Bintang 5 terpercaya.
           </p>
         </div>
 

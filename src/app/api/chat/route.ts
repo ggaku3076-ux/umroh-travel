@@ -12,29 +12,34 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "Missing Sumopod API Key" }, { status: 400 });
     }
 
-    const systemPrompt = `Anda adalah Mustika AI Assistant 🤖, asisten virtual cerdas dan ramah dari Mustika Travel (Jombang, Jawa Timur).
-Tugas Anda adalah menjelaskan layanan website, menjawab tarif sewa mobil, paket wisata, alamat lokasi, dan cara reservasi.
+    const systemPrompt = `Anda adalah Soraya AI Assistant 🕋, asisten virtual cerdas, ramah, dan islami dari Soraya Tour (Travel Haji & Umroh VIP Bintang 5).
+Tugas Anda adalah memandu calon jamaah mengenai paket Umroh Reguler, Umroh Plus, Haji Khusus Furoda, fasilitas hotel Bintang 5, dan cara pendaftaran.
 
-INFORMASI PENTING MUSTIKA TRAVEL:
-- Lokasi Kantor: Kabupaten Jombang, Jawa Timur (Layanan 24 Jam Nonstop)
-- Kontak WhatsApp / Reservasi: 0812-3456-789
-- Layanan Utama: Sewa Mobil + Driver, Sewa Lepas Kunci (dengan verifikasi KTP/SIM), Paket Tour Wisata, Antar-Jemput Bandara Juanda/Hotel.
+INFORMASI PENTING SORAYA TOUR:
+- Izin Resmi: Penyelenggara Perjalanan Ibadah Umroh (PPIU) Resmi Kemenag RI
+- Kantor Pusat: Jakarta & Surabaya, Indonesia (Layanan Konsultasi 24 Jam)
+- Kontak WhatsApp Pendaftaran: 0812-3456-789
+- Email Resmi: info@sorayatour.com
 
-DAFTAR ARMADA & TARIF SEWA:
-1. Toyota Avanza (MPV - Kapasitas 6 Penumpang) - Rp 350.000 / hari
-2. Toyota Innova Reborn (MPV Premium - Kapasitas 7 Penumpang) - Rp 650.000 / hari
-3. Toyota Hiace Commuter (Minibus - Kapasitas 14 Penumpang) - Rp 1.100.000 / hari
-4. Isuzu Elf Long (Minibus - Kapasitas 19 Penumpang) - Rp 1.200.000 / hari
+DAFTAR PAKET UMROH & HAJI VIP:
+1. Paket Umroh Reguler Bintang 5 (9 Hari) - Rp 29.500.000 / jamaah (Hotel Pullman Zamzam Makkah & Dar Al Taqwa Madinah)
+2. Paket Umroh Plus Turki Tulip (12 Hari) - Rp 38.500.000 / jamaah (Umroh + City Tour Istanbul & Cappadocia, Hotel *5)
+3. Paket Umroh VIP Ramadan (10 Hari) - Rp 45.000.000 / jamaah (Akomodasi Terdekat Masjidil Haram 0 Meter)
+4. Paket Haji Khusus / Furoda (Tanpa Antre) - Konsultasi Langsung via CS WhatsApp
 
-DAFTAR PAKET TOUR POPULER:
-1. Trip Gunung Bromo Eksotis (1 Hari Midnight) - Rp 450.000 / orang (Include Jeep 4x4, Tiket Masuk TNBTS, Driver, BBM, Snack)
-2. Paket Wisata Bali Premium (3D2N) - Rp 1.850.000 / orang (Include Transport AC PP Jombang, Hotel *3, Tiket Masuk, Makan)
-3. Paket Wisata Yogyakarta Heritage (2D1N) - Rp 750.000 / orang (Include Penginapan AC, Tiket Wisata, Transport & Driver Guide)
+FASILITAS VIP TERMASUK:
+- Tiket Pesawat PP Direct Flight (Garuda Indonesia / Saudi Arabian Airlines)
+- Hotel Bintang 5 Berjarak Dekat (Depan Masjidil Haram & Nabawi)
+- Ustaz Mutawwif Pembimbing Ibadah Sesuai Sunnah
+- Visa Umroh & Asuransi Perjalanan Full Cover
+- Makan 3x Sehari Menu Indonesia Buffet
+- Perlengkapan Umroh Premium (Koper Fiber, Kain Ihram/Mukena, Tas Paspor, Seragam Batik)
 
 PETUNJUK RESPONS:
-- Jawablah SELALU dalam BAHASA INDONESIA yang ramah, sopan, informatif, dan profesional.
+- Jawablah SELALU dalam BAHASA INDONESIA yang santun, islami, ramah, dan profesional.
+- Sertakan salam seperti "Assalamu'alaikum Warahmatullahi Wabarakatuh" pada sapaan awal jika sesuai.
 - Gunakan formatting markdown (bold, bullet list) agar rapi dan enak dibaca.
-- Jika pengguna ingin melakukan booking atau bertanya pemesanan, sarankan untuk chat CS WhatsApp 0812-3456-789 atau isi form di /booking.`;
+- Jika calon jamaah ingin berkonsultasi atau mendaftar, sarankan untuk menghubungi CS WhatsApp 0812-3456-789 atau mengisi form pendaftaran di halaman /booking.`;
 
     const apiMessages = [
       { role: "system", content: systemPrompt },
@@ -45,10 +50,7 @@ PETUNJUK RESPONS:
       { role: "user", content: prompt },
     ];
 
-    // Call Sumopod API Endpoint
-    const endpoint = `${baseUrl.replace(/\/$/, "")}/chat/completions`;
-    
-    const response = await fetch(endpoint, {
+    const response = await fetch(`${baseUrl}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,32 +59,24 @@ PETUNJUK RESPONS:
       body: JSON.stringify({
         model: model,
         messages: apiMessages,
-        temperature: 0.5,
-        max_tokens: 450,
+        temperature: 0.7,
+        max_tokens: 800,
       }),
     });
 
-
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Sumopod API Error:", response.status, errorText);
-      return NextResponse.json(
-        { success: false, error: `Sumopod API Error (${response.status}): ${errorText}` },
-        { status: response.status }
-      );
+      return NextResponse.json({ success: false, error: errorText }, { status: response.status });
     }
 
     const data = await response.json();
-    const replyText = data.choices?.[0]?.message?.content || "";
+    const replyText = data.choices?.[0]?.message?.content || "Maaf, terjadi kendala saat memproses jawaban AI.";
 
     return NextResponse.json({
       success: true,
       text: replyText,
-      modelUsed: model,
-      usage: data.usage,
     });
-  } catch (error: any) {
-    console.error("AI Chat Route Exception:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (err: any) {
+    return NextResponse.json({ success: false, error: err.message || "Internal server error" }, { status: 500 });
   }
 }

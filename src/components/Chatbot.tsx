@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { 
   MessageSquare, X, Send, Bot, User, Mic, MicOff, RefreshCw, 
-  BadgeCheck, ExternalLink, Sparkles, ChevronDown, Loader2 
+  BadgeCheck, ExternalLink, Sparkles, ChevronDown, Loader2, Star
 } from "lucide-react";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,10 +24,10 @@ export default function Chatbot() {
 
   // Initialize Chatbot Session & Supabase Sync
   useEffect(() => {
-    let existingSession = localStorage.getItem("mustika_chat_session_id");
+    let existingSession = localStorage.getItem("soraya_chat_session_id");
     if (!existingSession) {
       existingSession = `session_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
-      localStorage.setItem("mustika_chat_session_id", existingSession);
+      localStorage.setItem("soraya_chat_session_id", existingSession);
     }
     setSessionId(existingSession);
 
@@ -35,12 +35,12 @@ export default function Chatbot() {
     const welcomeMsg: ChatMessage = {
       id: "msg_welcome",
       role: "assistant",
-      content: "Halo! Saya **Mustika AI Assistant** 🤖. Selamat datang di Mustika Travel Jombang! \n\nAda yang bisa saya bantu jelaskan tentang layanan sewa mobil, rute paket wisata, atau cara booking hari ini?",
+      content: "Assalamu'alaikum! Saya **Soraya AI Assistant** 🕋. Selamat datang di **Soraya Tour** (Travel Haji & Umroh VIP Bintang 5).\n\nAda yang bisa saya bantu jelaskan mengenai Paket Umroh Reguler, Umroh Plus Turki, Perjalanan Haji Khusus Furoda, atau jadwal pendaftaran hari ini?",
       timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
       quickActions: [
-        { label: "🚗 Lihat Sewa Mobil", action: "Berapa sewa mobil?" },
-        { label: "🌋 Tour Bromo", action: "Info paket tour Bromo" },
-        { label: "📍 Lokasi Kantor", action: "Dimana alamat Mustika Travel?" },
+        { label: "🕋 Umroh Bintang 5", action: "Berapa biaya paket Umroh Bintang 5?" },
+        { label: "✈️ Umroh Plus Turki", action: "Info paket Umroh Plus Turki" },
+        { label: "📋 Cara Pendaftaran", action: "Bagaimana cara pendaftaran Umroh?" },
       ],
     };
 
@@ -58,10 +58,8 @@ export default function Chatbot() {
 
   // Auto-scroll to bottom of chat
   useEffect(() => {
-    if (isOpen) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages, isTyping, isOpen]);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isTyping]);
 
   // Voice Input Speech Recognition Setup
   useEffect(() => {
@@ -87,22 +85,17 @@ export default function Chatbot() {
     }
   }, []);
 
-  const toggleVoiceListening = () => {
+  const toggleVoiceInput = () => {
     if (!recognitionRef.current) {
-      alert("Fitur pengenalan suara tidak didukung di browser ini.");
+      alert("Fitur pengenal suara tidak didukung di browser ini.");
       return;
     }
-
     if (isListening) {
       recognitionRef.current.stop();
       setIsListening(false);
     } else {
-      try {
-        recognitionRef.current.start();
-        setIsListening(true);
-      } catch (err) {
-        console.warn("Speech recognition error:", err);
-      }
+      setIsListening(true);
+      recognitionRef.current.start();
     }
   };
 
@@ -110,282 +103,224 @@ export default function Chatbot() {
     const query = textToSend || inputQuery;
     if (!query.trim()) return;
 
-    const userMessage: ChatMessage = {
-      id: `msg_user_${Date.now()}`,
+    const userMsg: ChatMessage = {
+      id: `user_${Date.now()}`,
       role: "user",
       content: query,
       timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
     };
 
-    // Add user message to UI state
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMsg]);
     if (!textToSend) setInputQuery("");
     setIsTyping(true);
 
-    // Save to Supabase
-    if (sessionId) {
-      saveSupabaseMessage(sessionId, userMessage);
-    }
+    saveSupabaseMessage(sessionId, "user", query);
 
-    // Special quick action navigations
-    if (query.toLowerCase().includes("halaman booking") || query.toLowerCase().includes("ke halaman booking")) {
-      window.location.href = "/booking";
-      setIsTyping(false);
-      return;
-    }
-    if (query.toLowerCase().includes("halaman lokasi")) {
-      window.location.href = "/lokasi";
-      setIsTyping(false);
-      return;
-    }
-    if (query.toLowerCase().includes("buka wa cs") || query.toLowerCase().includes("wa cs") || query.toLowerCase().includes("chat wa")) {
-      window.open("https://wa.me/628123456789?text=Halo%20Mustika%20Travel,%20saya%20ingin%20tanya%20layanan", "_blank");
-    }
-
-    // Fetch AI response immediately
     try {
       const response = await generateAIResponse(query, messages);
-
-      const aiMessage: ChatMessage = {
-        id: `msg_ai_${Date.now()}`,
+      
+      const assistantMsg: ChatMessage = {
+        id: `assistant_${Date.now()}`,
         role: "assistant",
         content: response.text,
         timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
         quickActions: response.quickActions,
       };
 
-      setMessages((prev) => [...prev, aiMessage]);
-      setIsTyping(false);
-
-      if (sessionId) {
-        saveSupabaseMessage(sessionId, aiMessage);
-      }
+      setMessages((prev) => [...prev, assistantMsg]);
+      saveSupabaseMessage(sessionId, "assistant", response.text);
     } catch (err) {
-      console.warn("AI Chatbot Error:", err);
+      const errorMsg: ChatMessage = {
+        id: `err_${Date.now()}`,
+        role: "assistant",
+        content: "Maaf, terjadi masalah koneksi. Silakan hubungi CS WhatsApp kami di **0812-3456-789** untuk bantuan langsung.",
+        timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
+      };
+      setMessages((prev) => [...prev, errorMsg]);
+    } finally {
       setIsTyping(false);
     }
   };
 
+  const handleQuickAction = (actionText: string) => {
+    handleSendMessage(actionText);
+  };
+
+  const handleDirectWhatsApp = () => {
+    window.open("https://wa.me/628123456789?text=Halo%20Soraya%20Tour,%20saya%20ingin%20konsultasi%20Paket%20Umroh", "_blank");
+  };
 
   const handleResetChat = () => {
+    const newSession = `session_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+    localStorage.setItem("soraya_chat_session_id", newSession);
+    setSessionId(newSession);
+
     const welcomeMsg: ChatMessage = {
-      id: `msg_welcome_${Date.now()}`,
+      id: "msg_welcome_reset",
       role: "assistant",
-      content: "Percakapan telah direset. Ada yang bisa **Mustika AI** bantu kembali?",
+      content: "Percakapan telah direset. Ada yang bisa **Soraya AI** bantu kembali?",
       timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
       quickActions: [
-        { label: "🚗 Sewa Mobil", action: "Berapa sewa mobil?" },
-        { label: "🌋 Paket Bromo", action: "Info paket tour Bromo" },
+        { label: "🕋 Umroh Bintang 5", action: "Berapa biaya paket Umroh Bintang 5?" },
+        { label: "✈️ Umroh Plus Turki", action: "Info paket Umroh Plus Turki" },
+        { label: "📋 Cara Pendaftaran", action: "Bagaimana cara pendaftaran Umroh?" },
       ],
     };
+
     setMessages([welcomeMsg]);
+    createSupabaseChatSession(newSession);
   };
 
   return (
     <>
-      {/* FLOATING CHATBOT TRIGGER BUTTON */}
-      <div className="fixed bottom-6 right-6 z-50">
+      {/* FLOATING CHAT TRIGGER BUTTON */}
+      <div className="fixed bottom-6 right-6 z-[900]">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(!isOpen)}
-          className="relative flex items-center justify-center h-14 w-14 rounded-full bg-brand-orange text-white shadow-xl shadow-brand-orange/40 border border-white/20 focus:outline-none cursor-pointer group transform-gpu gpu-layer"
-          aria-label="Tanya Mustika AI Assistant"
+          className="relative group flex items-center gap-3 px-5 py-3.5 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-600 text-stone-950 shadow-xl shadow-amber-500/25 border border-amber-300 font-extrabold text-sm overflow-hidden"
+          aria-label="Tanya Soraya AI Assistant"
         >
-          <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
-            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-white" />
-          </span>
-
-
-          <AnimatePresence mode="wait">
-            {isOpen ? (
-              <motion.div
-                key="close"
-                initial={{ rotate: -45, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 45, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <X className="h-6 w-6" />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="bot"
-                initial={{ rotate: 45, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -45, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-                className="flex items-center justify-center"
-              >
-                <Bot className="h-7 w-7" />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <div className="relative flex items-center justify-center">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-stone-950 opacity-20" />
+            <Bot className="h-5 w-5 text-stone-950" />
+          </div>
+          <span>Tanya Soraya AI 🕋</span>
         </motion.button>
       </div>
 
-      {/* CHATBOT POPUP WINDOW (HARDWARE ACCELERATED) */}
+      {/* CHAT MODAL WINDOW */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-24 right-3 sm:right-6 z-50 w-[94vw] sm:w-[400px] h-[520px] max-h-[78vh] bg-white rounded-3xl shadow-xl border border-slate-200/90 flex flex-col overflow-hidden transform-gpu gpu-layer"
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed bottom-24 right-4 sm:right-6 z-[950] w-[calc(100vw-2rem)] sm:w-[420px] max-h-[600px] h-[80vh] rounded-3xl bg-[#12100E] border border-amber-500/30 shadow-2xl shadow-black/80 flex flex-col overflow-hidden text-white"
           >
-
-            {/* HEADER */}
-            <div className="bg-brand-dark text-white px-5 py-4 flex items-center justify-between border-b border-white/10 shrink-0">
+            {/* CHAT HEADER */}
+            <div className="bg-gradient-to-r from-[#1A1815] via-[#24201B] to-[#1A1815] px-5 py-4 border-b border-amber-500/20 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
-                <div className="relative h-10 w-10 rounded-2xl bg-brand-orange flex items-center justify-center text-white shrink-0 shadow-md">
-                  <Bot className="h-6 w-6" />
-                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-400 border-2 border-brand-dark" />
+                <div className="relative h-10 w-10 rounded-full bg-amber-500/20 border border-amber-400/40 flex items-center justify-center">
+                  <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
+                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-[#12100E]" />
                 </div>
                 <div>
-                  <div className="flex items-center gap-1.5">
-                    <h3 className="font-nunito font-bold text-sm leading-none">Mustika AI</h3>
-                    <BadgeCheck className="h-4 w-4 text-brand-orange-light shrink-0" />
-                  </div>
-                  <span className="text-[11px] text-white/70 font-light mt-0.5 block">Asisten Pintar Mustika Travel</span>
+                  <h3 className="font-nunito font-bold text-sm leading-none text-white">Soraya AI Assistant 🕋</h3>
+                  <span className="text-[11px] text-amber-300/80 font-light mt-0.5 block">Asisten Pintar Soraya Tour</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 <button
                   onClick={handleResetChat}
-                  title="Reset Obrolan"
-                  className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-colors"
+                  title="Reset Chat"
+                  className="p-2 rounded-full hover:bg-white/10 text-stone-400 hover:text-white transition-colors"
                 >
                   <RefreshCw className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
                   title="Tutup Chat"
-                  className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-colors"
+                  className="p-2 rounded-full hover:bg-white/10 text-stone-400 hover:text-white transition-colors"
                 >
-                  <ChevronDown className="h-5 w-5" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
             </div>
 
-            {/* MESSAGES LIST */}
-            <div className="flex-grow p-4 overflow-y-auto space-y-4 bg-brand-cream/40 text-xs">
+            {/* CHAT MESSAGES BODY */}
+            <div className="flex-grow p-4 overflow-y-auto space-y-4 bg-gradient-to-b from-[#12100E] to-[#0A0908]">
               {messages.map((msg) => (
-                <motion.div
+                <div
                   key={msg.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
                   className={`flex flex-col ${msg.role === "user" ? "items-end" : "items-start"}`}
                 >
-                  <div className="flex items-end gap-2 max-w-[85%]">
-                    {msg.role === "assistant" && (
-                      <div className="h-7 w-7 rounded-xl bg-brand-orange flex items-center justify-center text-white shrink-0 shadow-xs mb-1">
-                        <Bot className="h-4 w-4" />
-                      </div>
-                    )}
+                  <div
+                    className={`max-w-[85%] rounded-2xl p-4 text-xs leading-relaxed ${
+                      msg.role === "user"
+                        ? "bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 font-medium rounded-tr-none shadow-md"
+                        : "bg-white/10 border border-amber-500/20 text-stone-100 rounded-tl-none"
+                    }`}
+                  >
+                    <div className="whitespace-pre-wrap">{msg.content}</div>
 
-                    <div
-                      className={`p-3.5 rounded-2xl text-xs leading-relaxed whitespace-pre-line shadow-xs ${
-                        msg.role === "user"
-                          ? "bg-brand-orange text-white rounded-br-none"
-                          : "bg-white text-brand-dark border border-slate-200/80 rounded-bl-none"
-                      }`}
-                    >
-                      {msg.content}
+                    <div className={`mt-2 text-[9px] text-right font-light ${msg.role === "user" ? "text-stone-900/60" : "text-stone-400"}`}>
+                      {msg.timestamp}
                     </div>
-
-                    {msg.role === "user" && (
-                      <div className="h-7 w-7 rounded-xl bg-slate-700 flex items-center justify-center text-white shrink-0 shadow-xs mb-1">
-                        <User className="h-4 w-4" />
-                      </div>
-                    )}
                   </div>
 
-                  <span className="text-[9px] text-slate-400 mt-1 px-1">{msg.timestamp}</span>
-
-                  {/* QUICK SUGGESTION CHIPS */}
+                  {/* QUICK ACTIONS OPTIONS */}
                   {msg.quickActions && msg.quickActions.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-2.5 ml-9">
-                      {msg.quickActions.map((act, idx) => (
+                    <div className="flex flex-wrap gap-2 mt-3 pl-1">
+                      {msg.quickActions.map((qa, idx) => (
                         <button
                           key={idx}
-                          onClick={() => handleSendMessage(act.action)}
-                          className="px-3 py-1.5 rounded-xl bg-white hover:bg-brand-orange/10 border border-brand-orange/20 text-brand-orange font-semibold text-[11px] transition-all cursor-pointer shadow-2xs hover:border-brand-orange"
+                          onClick={() => handleQuickAction(qa.action)}
+                          className="px-3 py-1.5 rounded-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-[11px] font-medium border border-amber-500/30 transition-all duration-200"
                         >
-                          {act.label}
+                          {qa.label}
                         </button>
                       ))}
                     </div>
                   )}
-                </motion.div>
+                </div>
               ))}
 
-              {/* TYPING / THINKING INDICATOR */}
               {isTyping && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-2 ml-1"
-                >
-                  <div className="h-7 w-7 rounded-xl bg-brand-orange flex items-center justify-center text-white shrink-0 shadow-xs">
-                    <Bot className="h-4 w-4 animate-pulse" />
-                  </div>
-                  <div className="bg-white py-2.5 px-3.5 rounded-2xl border border-slate-200/90 flex items-center gap-2 shadow-xs text-xs font-medium text-brand-dark/80">
-                    <Loader2 className="h-3.5 w-3.5 text-brand-orange animate-spin" />
-                    <span className="font-semibold text-brand-orange animate-pulse">Thinking...</span>
-                    <div className="flex items-center gap-1 ml-0.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand-orange animate-bounce" style={{ animationDelay: "0ms" }} />
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand-orange animate-bounce" style={{ animationDelay: "150ms" }} />
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand-orange animate-bounce" style={{ animationDelay: "300ms" }} />
-                    </div>
-                  </div>
-                </motion.div>
+                <div className="flex items-center gap-2 text-stone-400 text-xs pl-2 py-2">
+                  <Loader2 className="h-4 w-4 animate-spin text-amber-400" />
+                  <span>Soraya AI sedang mengetik...</span>
+                </div>
               )}
-
-
               <div ref={messagesEndRef} />
             </div>
 
-            {/* INPUT FOOTER */}
-            <div className="p-3 bg-white border-t border-slate-200/80 shrink-0">
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSendMessage();
-                }}
-                className="flex items-center gap-2"
-              >
+            {/* CHAT INPUT FORM */}
+            <div className="p-3 bg-[#1A1815] border-t border-amber-500/20 flex flex-col gap-2 shrink-0">
+              <div className="flex items-center gap-2 bg-[#0D0C0A] border border-amber-500/30 rounded-2xl px-3 py-1.5 focus-within:border-amber-400 transition-all">
+                <input
+                  type="text"
+                  value={inputQuery}
+                  onChange={(e) => setInputQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                  placeholder="Tanya paket Umroh, harga, syarat..."
+                  className="w-full bg-transparent text-xs text-white placeholder-stone-400 focus:outline-none py-1.5"
+                />
+
                 <button
                   type="button"
-                  onClick={toggleVoiceListening}
-                  title={isListening ? "Mendengarkan..." : "Bicara via Mikrofon"}
-                  className={`p-2.5 rounded-xl transition-all ${
-                    isListening
-                      ? "bg-red-500 text-white animate-pulse"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  onClick={toggleVoiceInput}
+                  className={`p-1.5 rounded-full transition-colors ${
+                    isListening ? "bg-rose-500 text-white animate-pulse" : "text-stone-400 hover:text-amber-400"
                   }`}
+                  title="Voice Input"
                 >
                   {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                 </button>
 
-                <input
-                  type="text"
-                  placeholder={isListening ? "Mendengarkan ucapan Anda..." : "Ketik pertanyaan Anda..."}
-                  value={inputQuery}
-                  onChange={(e) => setInputQuery(e.target.value)}
-                  className="flex-grow py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-brand-dark focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange/20"
-                />
-
                 <button
-                  type="submit"
-                  disabled={!inputQuery.trim()}
-                  className="p-2.5 rounded-xl bg-brand-orange hover:bg-brand-orange-light disabled:opacity-50 text-white transition-colors cursor-pointer shrink-0"
+                  type="button"
+                  onClick={() => handleSendMessage()}
+                  disabled={!inputQuery.trim() || isTyping}
+                  className="p-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 font-bold disabled:opacity-40 hover:brightness-110 transition-all"
                 >
                   <Send className="h-4 w-4" />
                 </button>
-              </form>
+              </div>
+
+              <div className="flex items-center justify-between px-1 text-[10px] text-stone-400">
+                <button
+                  onClick={handleDirectWhatsApp}
+                  className="flex items-center gap-1 text-amber-400 hover:underline font-semibold"
+                >
+                  <span>Chat CS WhatsApp Langsung</span>
+                  <ExternalLink className="h-3 w-3" />
+                </button>
+                <span>Resmi Kemenag RI</span>
+              </div>
             </div>
           </motion.div>
         )}

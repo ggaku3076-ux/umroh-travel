@@ -76,19 +76,24 @@ export default function Navbar() {
           <Link 
             href="/" 
             className="flex items-center gap-3 group transition-transform duration-300 hover:scale-[1.02]"
-            aria-label="Mustika Travel - Kembali ke Beranda"
+            aria-label="Soraya Tour - Kembali ke Beranda"
           >
             <div className="relative h-11 w-11 shrink-0 overflow-hidden flex items-center justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/Asset/LOGO.png"
-                alt="Mustika Travel Logo"
+                alt="Soraya Tour Logo"
                 className="h-full w-full object-contain filter drop-shadow-sm bg-transparent group-hover:rotate-6 transition-transform duration-300"
               />
             </div>
-            <span className="font-nunito font-bold text-lg tracking-tight text-white leading-none">
-              Mustika Travel
-            </span>
+            <div className="flex flex-col">
+              <span className="font-nunito font-extrabold text-lg tracking-tight text-white leading-none">
+                Soraya <span className="text-amber-400">Tour</span>
+              </span>
+              <span className="text-[10px] text-amber-300/80 font-medium tracking-wider uppercase mt-0.5">
+                Haji & Umroh Premium
+              </span>
+            </div>
           </Link>
 
           {/* Center: Desktop nav links */}
@@ -193,12 +198,12 @@ export default function Navbar() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="/Asset/LOGO.png"
-                      alt="Mustika Travel Logo"
+                      alt="Soraya Tour Logo"
                       className="h-full w-full object-contain bg-transparent"
                     />
                   </div>
                   <span className="font-nunito font-bold text-lg text-brand-dark tracking-tight">
-                    Mustika Travel
+                    Soraya <span className="text-amber-600 font-extrabold">Tour</span>
                   </span>
                 </div>
 

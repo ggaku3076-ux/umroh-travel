@@ -20,21 +20,22 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Mustika Travel | Jelajahi Keindahan Gunung Bromo",
-  description: "Mustika Travel melayani rental mobil, paket tour wisata Gunung Bromo, dan layanan perjalanan antarkota berkualitas di Jombang.",
+  title: "Soraya Tour | Travel Haji & Umroh Premium Bintang 5",
+  description: "Soraya Tour melayani paket Umroh Reguler, Umroh Plus Turki/Al-Aqsa, dan Perjalanan Ibadah Haji Khusus dengan pelayanan VIP bintang 5 dan pembimbing ibadah berpengalaman.",
   keywords: [
-    "Mustika Travel",
-    "Rental Mobil Jombang",
-    "Paket Wisata Bromo",
-    "Ziarah Wali Songo",
-    "Sewa Hiace Jombang",
-    "Sewa Mobil Murah Jombang"
+    "Soraya Tour",
+    "Travel Umroh",
+    "Travel Haji Khusus",
+    "Paket Umroh Bintang 5",
+    "Umroh VIP",
+    "Travel Haji Umroh Terpercaya",
+    "Umroh Plus Turki"
   ],
-  authors: [{ name: "Mustika Travel Team" }],
+  authors: [{ name: "Soraya Tour Team" }],
   openGraph: {
-    title: "Mustika Travel | Jelajahi Keindahan Gunung Bromo",
-    description: "Mustika Travel melayani rental mobil, paket tour wisata Gunung Bromo, dan layanan perjalanan antarkota berkualitas di Jombang.",
-    siteName: "Mustika Travel",
+    title: "Soraya Tour | Travel Haji & Umroh Premium Bintang 5",
+    description: "Soraya Tour melayani paket Umroh Reguler, Umroh Plus, dan Perjalanan Ibadah Haji Khusus dengan pelayanan VIP bintang 5 dan pembimbing ibadah berpengalaman.",
+    siteName: "Soraya Tour",
     locale: "id_ID",
     type: "website",
   },
@@ -58,14 +59,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className="min-h-full flex flex-col bg-brand-cream text-brand-dark selection:bg-brand-orange selection:text-white">
+      <body className="flex min-h-full flex-col font-sans bg-[#0E0C0A] text-white antialiased selection:bg-amber-500/30 selection:text-amber-300">
         <Navbar />
         <main className="flex-grow">{children}</main>
         <Footer />
         <Chatbot />
       </body>
     </html>
-
   );
 }
-

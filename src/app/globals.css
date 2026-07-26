@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f0f6fa; /* Soft sky blue tint background */
-  --foreground: #1e293b; /* Dark slate text */
+  --background: #fafafa;
+  --foreground: #12100e;
   
-  /* Brand color tokens */
-  --brand-orange: #4073A7;       /* Biru langit utama */
-  --brand-orange-light: #5893C4; /* Biru langit lebih terang untuk hover */
-  --brand-cream: #f0f6fa;        /* Soft sky blue background */
-  --brand-dark: #1e293b;         /* Slate dark text */
+  /* Soraya Tour Gold & White Luxury Palette */
+  --brand-orange: #D4AF37;       /* Royal Gold Utama */
+  --brand-orange-light: #E5C158; /* Emas Terang Hover */
+  --brand-cream: #fafafa;        /* Putih Bersih */
+  --brand-dark: #12100e;         /* Warm Dark Gold Accent */
   --brand-light: #ffffff;
-  --brand-blue: #4073A7;         /* Biru langit utama */
-  --brand-blue-bg: #e6f0fa;      /* Biru langit sangat muda */
+  --brand-blue: #D4AF37;         /* Royal Gold */
+  --brand-blue-bg: #fffdf0;      /* Soft Gold Tint */
 
   scroll-behavior: smooth;
 }
@@ -55,47 +55,16 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid var(--brand-orange-light);
+  outline: 2px solid var(--brand-orange);
   outline-offset: 2px;
 }
 
-/* Ultra-Fast 60 FPS Mobile Touch & GPU Scroll Optimizations */
-html, body {
-  -webkit-overflow-scrolling: touch;
-  touch-action: manipulation;
+/* Luxury Gold Glow Utilities */
+.gold-glow {
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
 }
-
-.gpu-layer {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-/* Glassmorphism utility - Opaque & Instant Rendering for Mobile */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.98);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-}
-
-.glass-panel-dark {
-  background: rgba(30, 41, 59, 0.98);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Disable GPU-draining infinite keyframe animations on mobile touch screens */
-@media (max-width: 768px) {
-  .animate-ping {
-    animation: none !important;
-  }
-}
-
-/* Smooth card transitions - GPU Native */
-@media (hover: hover) {
-  .card-hover-effect {
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
-                box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .card-hover-effect:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.06);
-  }
+.gold-text-gradient {
+  background: linear-gradient(135deg, #FFFDF0 0%, #F5E6AD 40%, #D4AF37 80%, #AA820A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

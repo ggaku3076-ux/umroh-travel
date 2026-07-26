@@ -49,16 +49,16 @@ export function generateItineraryPDF(data: PDFItineraryData) {
   doc.setFillColor(accentOrange[0], accentOrange[1], accentOrange[2]);
   doc.rect(0, 0, pageWidth, 3, "F");
 
-  // Company Title
-  doc.setTextColor(255, 255, 255);
+  // Header Brand
+  doc.setTextColor(212, 175, 55); // Gold
+  doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
-  doc.text("MUSTIKA TRAVEL", margin, 16);
+  doc.text("SORAYA TOUR", margin, 16);
 
+  doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(8.5);
-  doc.setTextColor(203, 213, 225);
-  doc.text("Layanan Sewa Mobil & Paket Wisata Resmi Jombang - 24 Jam Nonstop", margin, 23);
+  doc.setTextColor(140, 120, 80);
+  doc.text("BIRO PERJALANAN IBADAH HAJI & UMROH BINTANG 5", margin, 21);
 
   // Document Badge Right Side
   doc.setFont("helvetica", "bold");
@@ -327,17 +327,16 @@ export function generateItineraryPDF(data: PDFItineraryData) {
   doc.setFontSize(8);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(255, 255, 255);
-  doc.text("MUSTIKA TRAVEL", margin, footerY + 5.5);
+  doc.text("SORAYA TOUR", margin, footerY + 5.5);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(7.5);
-  doc.setTextColor(203, 213, 225);
-  doc.text("Kab. Jombang, Jawa Timur  |  WA CS: 0812-3456-789  |  info@mustikatravel.com", margin, footerY + 10);
+  doc.setTextColor(140, 120, 80);
+  doc.text("Travel Haji & Umroh VIP  |  WA CS: 0812-3456-789  |  info@sorayatour.com", margin, footerY + 10);
 
   doc.setFont("helvetica", "bold");
-  doc.text("www.mustikatravel.com", pageWidth - margin, footerY + 8, { align: "right" });
+  doc.text("www.sorayatour.com", pageWidth - margin, footerY + 8, { align: "right" });
 
-  // Save PDF
-  const filename = `Itinerary_MustikaTravel_${data.destination.replace(/\s+/g, "_")}.pdf`;
+  const filename = `Itinerary_SorayaTour_${data.destination.replace(/\s+/g, "_")}.pdf`;
   doc.save(filename);
 }

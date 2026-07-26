@@ -1,41 +1,41 @@
 import Link from "next/link";
 import Hero from "@/components/Hero";
 import AITripCustomizer from "@/components/AITripCustomizer";
-import { Car, Compass, CalendarRange, MapPin, ArrowRight, BadgeCheck } from "lucide-react";
+import { Compass, CalendarRange, MapPin, ArrowRight, BadgeCheck, Star, ShieldCheck, Heart } from "lucide-react";
 
 export default function Home() {
   const portalCards = [
     {
-      icon: Car,
-      title: "Armada Rental",
-      description: "Lihat pilihan unit mobil terbaik kami mulai dari Avanza, Innova, Hiace, hingga Elf yang siap digunakan.",
-      href: "/armada",
-      linkText: "Jelajahi Armada",
-      badge: "Armada Terawat",
+      icon: Star,
+      title: "Paket Umroh Bintang 5",
+      description: "Pilihan perjalanan ibadah Umroh Reguler 9 hari & Umroh VIP Ramadan dengan hotel terdekat Masjidil Haram.",
+      href: "/paket",
+      linkText: "Pilih Paket Umroh",
+      badge: "Favorit Jamaah",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Haji Khusus Furoda",
+      description: "Program ibadah Haji Khusus tanpa antrean lama dengan fasilitas tenda VIP Arafah-Mina dan konsumsi penuh.",
+      href: "/paket",
+      linkText: "Info Haji Khusus",
+      badge: "Garansi Resmi",
     },
     {
       icon: Compass,
-      title: "Paket Wisata",
-      description: "Pilihan destinasi tour menarik ke Bali, Malang, Jogja, Bromo, hingga ziarah Wali Songo.",
+      title: "Umroh Plus Turki",
+      description: "Kombinasi perjalanan ibadah Umroh suci di Makkah & Madinah dilanjutkan ziarah wisata sejarah di Istanbul & Cappadocia.",
       href: "/paket",
-      linkText: "Pilih Paket Wisata",
-      badge: "Destinasi Favorit",
+      linkText: "Lihat Rencana Trip",
+      badge: "Paket Populer",
     },
     {
       icon: CalendarRange,
-      title: "Pemesanan (Booking)",
-      description: "Simulasi pemesanan sewa mobil dan paket tour secara cepat dan terintegrasi sistem.",
+      title: "Pendaftaran & Konsultasi",
+      description: "Daftar Umroh secara mudah, cepat, dan konsultasikan jadwal keberangkatan bersama tim Ustaz Mutawwif Soraya Tour.",
       href: "/booking",
-      linkText: "Mulai Booking",
+      linkText: "Mulai Konsultasi",
       badge: "Respon Cepat",
-    },
-    {
-      icon: MapPin,
-      title: "Kontak & Alamat",
-      description: "Hubungi Customer Service kami dan temukan lokasi operasional Mustika Travel di Jombang.",
-      href: "/lokasi",
-      linkText: "Lihat Kontak",
-      badge: "24 Jam Nonstop",
     },
   ];
 
@@ -45,58 +45,58 @@ export default function Home() {
       
       {/* Home Portal Navigation Grid */}
       <section 
-        className="py-16 md:py-24 bg-brand-blue-bg border-t border-brand-blue/10 relative overflow-hidden"
+        className="py-16 md:py-24 bg-[#12100E] border-t border-amber-500/20 relative overflow-hidden"
         aria-labelledby="portal-title"
       >
         <div className="mx-auto max-w-7xl px-4 md:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-blue/10 font-sans text-xs font-bold tracking-widest text-brand-blue uppercase">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 font-sans text-xs font-bold tracking-widest text-amber-400 uppercase border border-amber-500/30">
               <BadgeCheck className="h-3.5 w-3.5" />
-              Layanan Perjalanan Kami
+              Layanan Ibadah Soraya Tour
             </span>
             <h2 
               id="portal-title" 
-              className="text-3xl font-extrabold text-brand-dark sm:text-4xl mt-4 tracking-tight"
+              className="text-3xl font-extrabold text-white sm:text-4xl mt-4 tracking-tight font-nunito"
             >
-              Solusi Perjalanan Terbaik Anda
+              Fasilitas & Program Ibadah Bintang 5
             </h2>
-            <p className="text-base text-brand-dark/70 mt-4 leading-relaxed font-light">
-              Pilih layanan di bawah ini untuk melihat detail paket sewa mobil, rute tour, simulasi pemesanan, atau untuk menghubungi tim CS kami.
+            <p className="text-stone-300 mt-4 text-base font-light leading-relaxed">
+              Jadikan perjalanan ibadah Anda dan keluarga penuh keberkahan, kenyamanan, dan kepastian bersama Soraya Tour.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {portalCards.map((card, index) => {
-              const IconComponent = card.icon;
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {portalCards.map((card, idx) => {
+              const IconComp = card.icon;
               return (
-                <div
-                  key={index}
-                  className="bg-white p-7 rounded-3xl border border-brand-blue/15 hover:border-brand-blue flex flex-col justify-between items-start text-left shadow-xs hover:shadow-md transition-all duration-200 relative group cursor-pointer"
+                <div 
+                  key={idx}
+                  className="rounded-3xl bg-[#1A1815] border border-amber-500/20 p-6 flex flex-col justify-between hover:border-amber-400/50 hover:shadow-xl hover:shadow-amber-500/10 transition-all duration-300 group"
                 >
-                  <div className="flex flex-col gap-4 w-full">
-                    <div className="flex items-center justify-between w-full">
-                      <div className="h-12 w-12 rounded-2xl bg-brand-blue-bg border border-brand-blue/20 flex items-center justify-center text-brand-blue shrink-0 shadow-xs group-hover:bg-brand-blue group-hover:text-white transition-colors duration-200">
-                        <IconComponent className="h-6 w-6" aria-hidden="true" />
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="h-12 w-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:bg-amber-400 group-hover:text-stone-950 transition-all duration-300">
+                        <IconComp className="h-6 w-6" />
                       </div>
-                      <span className="text-[10px] font-bold text-brand-blue bg-brand-blue-bg/80 px-2.5 py-1 rounded-full border border-brand-blue/15">
+                      <span className="text-[10px] font-bold text-amber-300 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">
                         {card.badge}
                       </span>
                     </div>
 
-                    <h3 className="text-lg font-bold text-brand-dark group-hover:text-brand-blue transition-colors duration-200 mt-1">
+                    <h3 className="text-xl font-bold text-white mb-2 font-nunito group-hover:text-amber-300 transition-colors">
                       {card.title}
                     </h3>
-                    <p className="text-sm text-brand-dark/60 leading-relaxed font-light">
+                    <p className="text-xs text-stone-300 leading-relaxed font-light mb-6">
                       {card.description}
                     </p>
                   </div>
 
-                  <Link
+                  <Link 
                     href={card.href}
-                    className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-brand-blue group-hover:text-brand-blue-light transition-colors"
+                    className="inline-flex items-center gap-2 text-xs font-bold text-amber-400 hover:text-amber-300 transition-colors group-hover:translate-x-1 duration-200"
                   >
                     <span>{card.linkText}</span>
-                    <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1.5 transition-transform duration-200" aria-hidden="true" />
+                    <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
               );
@@ -105,7 +105,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* AI Smart Budget & Trip Customizer Section */}
+      {/* AI TRIP CUSTOMIZER FOR UMROH */}
       <AITripCustomizer />
     </>
   );

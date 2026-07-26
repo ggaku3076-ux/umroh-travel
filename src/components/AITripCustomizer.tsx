@@ -2,415 +2,284 @@
 
 import { useState, useMemo } from "react";
 import { 
-  Wand2, Users, Calendar, Sparkles, Download, MessageSquare, BadgeCheck, Car 
+  Wand2, Users, Calendar, Sparkles, Download, MessageSquare, BadgeCheck, Star, ShieldCheck
 } from "lucide-react";
 import { generateItineraryPDF } from "@/lib/pdfGenerator";
 
-
-
-
 export default function AITripCustomizer() {
-  const [destination, setDestination] = useState<string>("Gunung Bromo");
-  const [duration, setDuration] = useState<string>("3D2N");
-  const [passengers, setPassengers] = useState<number>(4);
-  const [tripStyle, setTripStyle] = useState<"opentrip" | "family" | "luxury">("family");
+  const [destination, setDestination] = useState<string>("Umroh Reguler Bintang 5");
+  const [duration, setDuration] = useState<string>("9Hari");
+  const [passengers, setPassengers] = useState<number>(2);
+  const [tripStyle, setTripStyle] = useState<"reguler" | "family" | "vip">("vip");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
 
-  // Instant AI Customizer Calculation Engine
+  // Instant AI Customizer Calculation Engine for Umroh
   const tripCalculation = useMemo(() => {
-    let basePricePerPerson = 450000; // default Bromo midnight
+    let basePricePerPerson = 29500000; // default Umroh Reguler 9 hari
 
-    if (destination.includes("Bromo")) {
-      basePricePerPerson = duration === "1D" ? 450000 : duration === "2D1N" ? 850000 : 1250000;
-    } else if (destination.includes("Bali")) {
-      basePricePerPerson = duration === "2D1N" ? 1250000 : duration === "3D2N" ? 1850000 : 2450000;
-    } else if (destination.includes("Yogyakarta")) {
-      basePricePerPerson = duration === "2D1N" ? 750000 : duration === "3D2N" ? 1150000 : 1550000;
-    } else if (destination.includes("Malang")) {
-      basePricePerPerson = duration === "2D1N" ? 650000 : duration === "3D2N" ? 950000 : 1350000;
+    if (destination.includes("Turki")) {
+      basePricePerPerson = 38500000;
+    } else if (destination.includes("Aqsa")) {
+      basePricePerPerson = 42500000;
+    } else if (destination.includes("Haji")) {
+      basePricePerPerson = 185000000;
     } else {
-      basePricePerPerson = duration === "2D1N" ? 700000 : duration === "3D2N" ? 1100000 : 1500000;
+      basePricePerPerson = duration === "9Hari" ? 29500000 : duration === "12Hari" ? 34500000 : 45000000;
     }
 
-    // Adjust price multipliers based on Trip Style & Passenger Group Size
-    let styleMultiplier = tripStyle === "opentrip" ? 0.85 : tripStyle === "family" ? 1.0 : 1.45;
-    
-    // Scale discount for larger group sizes
-    let groupDiscount = passengers >= 15 ? 0.8 : passengers >= 7 ? 0.88 : passengers >= 4 ? 0.95 : 1.0;
+    let styleMultiplier = tripStyle === "reguler" ? 0.95 : tripStyle === "family" ? 1.0 : 1.25;
+    let groupDiscount = passengers >= 10 ? 0.92 : passengers >= 4 ? 0.96 : 1.0;
 
-    const pricePerPerson = Math.round((basePricePerPerson * styleMultiplier * groupDiscount) / 10000) * 10000;
+    const pricePerPerson = Math.round((basePricePerPerson * styleMultiplier * groupDiscount) / 50000) * 50000;
     const totalPrice = pricePerPerson * passengers;
-    const downPayment = Math.round(totalPrice * 0.3);
+    const downPayment = Math.round(totalPrice * 0.2);
 
-    // Fleet Recommendation logic
-    let vehicle = "Toyota Avanza (MPV)";
-    if (passengers <= 6) {
-      vehicle = tripStyle === "luxury" ? "Toyota Innova Reborn Premium" : "Toyota Avanza (MPV)";
-    } else if (passengers <= 7) {
-      vehicle = "Toyota Innova Reborn";
-    } else if (passengers <= 14) {
-      vehicle = "Toyota Hiace Commuter (Minibus 14 Seat)";
-    } else {
-      vehicle = "Isuzu Elf Long (Minibus 19 Seat)";
+    let hotelRecommendation = "Pullman Zamzam Makkah & Dar Al Taqwa Madinah (Bintang 5)";
+    if (tripStyle === "vip") {
+      hotelRecommendation = "Raffles Makkah Palace & Oberoi Madinah (VIP 0 Meter)";
+    } else if (tripStyle === "reguler") {
+      hotelRecommendation = "Anjum Hotel Makkah & Frontel Al Harithia Madinah (Bintang 5)";
     }
 
-    // Dynamic Day-by-Day Itinerary Generation
-    const dayByDay = [];
-    if (duration === "1D") {
-      dayByDay.push({
-        day: "Hari 1",
-        title: `Eksplorasi Midnight ${destination}`,
-        activities: [
-          `00:00 - Penjemputan peserta di area Jombang / Surabaya oleh driver profesional.`,
-          `03:30 - Tiba di lokasi transit & penjelajahan wisata utama ${destination}.`,
-          `06:00 - Nikmati pemandangan matahari terbit & spot foto terbaik.`,
-          `10:00 - Kuliner lokal khas & perjalanan kembali ke kota asal.`,
-        ],
-      });
-    } else if (duration === "2D1N") {
-      dayByDay.push({
-        day: "Hari 1",
-        title: `Penjemputan & Check-In Hotel ${destination}`,
-        activities: [
-          `07:00 - Berangkat dari Jombang menuju ${destination} dengan armada AC nyaman.`,
-          `12:00 - Makan siang kuliner khas lokal & check-in penginapan.`,
-          `15:00 - Mengunjungi destinasi populer & wisata sunset.`,
-        ],
-      });
-      dayByDay.push({
-        day: "Hari 2",
-        title: `Wisata Utama & Belanja Oleh-Oleh`,
-        activities: [
-          `07:30 - Breakfast hotel & check-out penginapan.`,
-          `09:00 - Mengunjungi pusat kerajinan & pusat oleh-oleh khas.`,
-          `14:00 - Perjalanan kembali ke Jombang, tour selesai dengan berkesan.`,
-        ],
-      });
-    } else {
-      dayByDay.push({
-        day: "Hari 1",
-        title: `Keberangkatan & Eksplorasi ${destination}`,
-        activities: [
-          `06:30 - Penjemputan peserta tour di Jombang & perjalanan nyaman.`,
-          `13:00 - Check-in hotel bintang pilihan & istirahat sejenak.`,
-          `16:00 - Wisata pantai / spot kuliner malam terfavorit.`,
-        ],
-      });
-      dayByDay.push({
-        day: "Hari 2",
-        title: `Full Day Tour Destinasi Ikonik`,
-        activities: [
-          `08:00 - Penjelajahan 3 destinasi wisata utama & wahana rekreasi.`,
-          `12:30 - Makan siang resto lokal include dalam paket.`,
-          `18:00 - Sunset dinner & acara bebas ramah tamah rombongan.`,
-        ],
-      });
-      dayByDay.push({
-        day: "Hari 3",
-        title: `Pusat Oleh-Oleh & Kepulangan`,
-        activities: [
-          `08:30 - Breakfast, check-out hotel, & wisata souvenir khas.`,
-          `13:00 - Perjalanan kembali ke Jombang, pengantaran peserta ke titik asal.`,
-        ],
-      });
-    }
-
-    const highlights = [
-      `Transportasi AC PP dari Jombang (${vehicle})`,
-      tripStyle === "opentrip" ? "Penginapan sharing room AC" : tripStyle === "family" ? "Hotel Bintang 3 Nyaman" : "Hotel Bintang 4 VIP",
-      "Tiket Masuk Semua Objek Wisata",
-      "Driver Profesional, BBM, & Parkir Tol",
-      "Makan Sesuai Program & Air Mineral Free",
+    const dayByDay = [
+      { day: 1, title: "Keberangkatan & Tiba di Jeddah", desc: "Penerbangan direct flight ke Jeddah, proses imigrasi, dan menuju hotel Madinah." },
+      { day: 2, title: "Ziarah Masjid Nabawi & Raudah", desc: "Salat khusyu di Masjid Nabawi, ziarah Makam Rasulullah SAW & Raudah." },
+      { day: 3, title: "Ziarah Kota Madinah", desc: "Ziarah Masjid Quba, Jabal Uhud, Masjid Qiblatain, dan Kebun Kurma." },
+      { day: 4, title: "Ihraam & Menuju Makkah Al-Mukarramah", desc: "Ambil miqat di Bir Ali, perjalanan dengan Kereta Cepat Haramain menuju Makkah, dilanjutkan pelaksanaan Umroh Utama (Tawaf & Sa'i)." },
+      { day: 5, title: "Ibadah Khusyu Makkah", desc: "Memperbanyak salat di depan Ka'bah Masjidil Haram & ikhtikaf." },
+      { day: 6, title: "Ziarah Kota Makkah", desc: "Ziarah Jabal Tsur, Jabal Rahmah, Arafah, Muzdalifah, & Mina." },
+      { day: 7, title: "Tawaf Wada & Persiapan Kepulangan", desc: "Pelaksanaan Tawaf Wada', check-out hotel Makkah, & perjalanan menuju Bandara Jeddah." },
+      { day: 8, title: "Penerbangan Kembali ke Indonesia", desc: "Penerbangan kembali menuju tanah air." },
+      { day: 9, title: "Tiba di Indonesia", desc: "Tiba di tanah air dengan selamat dan meraih predikat Umroh Maqbul." }
     ];
 
     return {
       pricePerPerson,
       totalPrice,
       downPayment,
-      recommendedVehicle: vehicle,
+      hotelRecommendation,
       dayByDay,
-      highlights,
     };
   }, [destination, duration, passengers, tripStyle]);
 
-  const handleBookingWA = () => {
-    let msg = `Halo Mustika Travel, saya ingin booking Paket Custom Trip hasil AI Customizer:\n\n`;
-    msg += `- *Destinasi:* ${destination}\n`;
-    msg += `- *Durasi:* ${duration}\n`;
-    msg += `- *Jumlah Peserta:* ${passengers} orang\n`;
-    msg += `- *Gaya Trip:* ${tripStyle === "opentrip" ? "Open Trip Budget" : tripStyle === "family" ? "Family Private Trip" : "Private Luxury VIP"}\n`;
-    msg += `- *Rekomendasi Armada:* ${tripCalculation.recommendedVehicle}\n`;
-    msg += `- *Estimasi Harga:* Rp ${tripCalculation.pricePerPerson.toLocaleString("id-ID")}/orang (Total: Rp ${tripCalculation.totalPrice.toLocaleString("id-ID")})\n`;
-    msg += `- *DP 30%:* Rp ${tripCalculation.downPayment.toLocaleString("id-ID")}\n\n`;
-    msg += `Mohon konfirmasi jadwal & bantuan penguncian unit. Terima kasih!`;
-
-    window.open(`https://wa.me/628123456789?text=${encodeURIComponent(msg)}`, "_blank");
-  };
-
-  const handleDownloadPdf = () => {
+  const handleDownloadPDF = async () => {
     setIsGeneratingPdf(true);
     try {
-      generateItineraryPDF({
-        title: `Paket Custom ${destination} (${duration})`,
+      await generateItineraryPDF({
         destination,
         duration,
-        passengerCount: passengers,
-        tripStyle: tripStyle === "opentrip" ? "Open Trip Budget" : tripStyle === "family" ? "Family Private Trip" : "Private Luxury VIP",
-        pricePerPerson: tripCalculation.pricePerPerson,
+        passengers,
+        vehicle: tripCalculation.hotelRecommendation,
         totalPrice: tripCalculation.totalPrice,
+        pricePerPerson: tripCalculation.pricePerPerson,
         downPayment: tripCalculation.downPayment,
-        recommendedVehicle: tripCalculation.recommendedVehicle,
-        highlights: tripCalculation.highlights,
         dayByDay: tripCalculation.dayByDay,
       });
     } catch (err) {
-      console.error("PDF generation error:", err);
+      alert("Terjadi masalah saat membuat PDF. Silakan coba lagi.");
     } finally {
-      setTimeout(() => setIsGeneratingPdf(false), 800);
+      setIsGeneratingPdf(false);
     }
   };
 
+  const handleBookWhatsApp = () => {
+    let msg = `Halo Soraya Tour, saya ingin mendaftar *Paket Umroh Custom AI*:\n\n`;
+    msg += `• Paket: ${destination}\n`;
+    msg += `• Durasi: ${duration}\n`;
+    msg += `• Jumlah Jamaah: ${passengers} Orang\n`;
+    msg += `• Kategori: ${tripStyle.toUpperCase()}\n`;
+    msg += `• Estimasi Total: Rp ${tripCalculation.totalPrice.toLocaleString("id-ID")}\n\n`;
+    msg += `Mohon konfirmasi ketersediaan kuota & jadwal keberangkatan.`;
+
+    const encoded = encodeURIComponent(msg);
+    window.open(`https://wa.me/628123456789?text=${encoded}`, "_blank");
+  };
+
   return (
-    <section 
-      id="ai-customizer" 
-      className="py-16 md:py-24 bg-gradient-to-b from-brand-cream via-white to-brand-cream border-y border-slate-200 relative overflow-hidden"
-    >
+    <section className="py-20 md:py-28 bg-[#0D0C0A] text-white relative overflow-hidden border-t border-amber-500/20">
       <div className="mx-auto max-w-7xl px-4 md:px-8 relative z-10">
         
-        {/* HEADER SECTION */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-orange/10 font-sans text-xs font-bold tracking-widest text-brand-orange uppercase shadow-2xs">
-            <Wand2 className="h-4 w-4" />
-
-            AI Smart Budget & Trip Customizer
+        {/* SECTION HEADER */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-xs uppercase tracking-widest">
+            <Wand2 className="h-4 w-4 text-amber-400" />
+            Instant AI Customizer
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark mt-3 font-nunito tracking-tight">
-            Rancang Paket Wisata Impian Anda <span className="text-brand-orange">Dalam 3 Detik</span>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mt-4 font-nunito tracking-tight">
+            Hitung Estimasi Paket Umroh <br className="hidden sm:inline" />
+            <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+              Secara Instan 3 Detik
+            </span>
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-3">
-            Pilih destinasi, durasi, dan budget. AI kami secara instan meracik rincian jadwal, estimasi biaya total, dan brosur PDF resmi tanpa buat admin pusing!
+          <p className="text-stone-300 mt-4 text-sm sm:text-base font-light leading-relaxed">
+            Sesuaikan paket ibadah Umroh dan Haji Anda secara fleksibel. Sistem AI Soraya Tour langsung menghitung estimasi biaya dan merekomendasikan hotel Bintang 5 secara otomatis.
           </p>
         </div>
 
-        {/* MAIN CUSTOMIZER GRID */}
+        {/* CUSTOMIZER CONTAINER */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* LEFT COLUMN: INPUT CONTROLS */}
-          <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200/80 space-y-6">
-            <h3 className="font-nunito font-bold text-lg text-brand-dark flex items-center gap-2 border-b border-slate-100 pb-3">
-              <Sparkles className="h-5 w-5 text-brand-orange" />
-              Atur Kriteria Perjalanan
-            </h3>
-
-            {/* 1. DESTINATION SELECTOR */}
+          {/* INPUT FORM PANEL */}
+          <div className="lg:col-span-7 bg-[#1A1815] border border-amber-500/20 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl">
+            
+            {/* 1. DESTINASI */}
             <div>
-              <label className="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">
-                1. Pilih Destinasi Wisata
+              <label className="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">
+                1. Pilih Jenis Paket Ibadah
               </label>
-              <select
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-                className="w-full py-3 px-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-semibold text-brand-dark focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange/20 cursor-pointer"
-              >
-                <option value="Gunung Bromo">🌋 Gunung Bromo (Sunrise & Kawah)</option>
-                <option value="Pulau Bali">🏖️ Pulau Bali (Kuta, Ubud, Jimbaran)</option>
-                <option value="Yogyakarta">🏛️ Yogyakarta (Borobudur & Malioboro)</option>
-                <option value="Malang & Batu">🎡 Malang & Kota Batu (Jatim Park)</option>
-                <option value="Ziarah Wali Songo">🕌 Ziarah Wali Songo / Kustom</option>
-              </select>
-            </div>
-
-            {/* 2. DURATION SELECTOR */}
-            <div>
-              <label className="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">
-                2. Durasi Perjalanan
-              </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-3">
                 {[
-                  { id: "1D", label: "1 Hari (Midnight)" },
-                  { id: "2D1N", label: "2 Hari 1 Malam" },
-                  { id: "3D2N", label: "3 Hari 2 Malam" },
-                ].map((d) => (
+                  "Umroh Reguler Bintang 5",
+                  "Umroh Plus Turki",
+                  "Umroh Plus Al-Aqsa",
+                  "Haji Khusus Furoda"
+                ].map((item) => (
                   <button
-                    key={d.id}
-                    type="button"
-                    onClick={() => setDuration(d.id)}
-                    className={`py-2.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
-                      duration === d.id
-                        ? "bg-brand-orange text-white border-brand-orange shadow-md shadow-brand-orange/20"
-                        : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                    key={item}
+                    onClick={() => setDestination(item)}
+                    className={`py-3 px-4 rounded-2xl text-xs font-bold transition-all text-left border ${
+                      destination === item
+                        ? "bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 border-amber-300 shadow-md"
+                        : "bg-white/5 border-white/10 text-stone-300 hover:border-amber-500/40"
                     }`}
                   >
-                    {d.label}
+                    {item}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* 3. PASSENGER COUNT STEPPER */}
+            {/* 2. DURASI */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-bold text-brand-dark uppercase tracking-wider">
-                  3. Jumlah Peserta Rombongan
-                </label>
-                <span className="px-2.5 py-0.5 rounded-full bg-brand-orange/10 text-brand-orange font-extrabold text-xs">
-                  {passengers} Orang
-                </span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="30"
-                value={passengers}
-                onChange={(e) => setPassengers(parseInt(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-orange"
-              />
-              <div className="flex justify-between text-[10px] text-slate-400 font-semibold mt-1">
-                <span>1 Orang</span>
-                <span>15 Orang (Minibus)</span>
-                <span>30 Orang</span>
-              </div>
-            </div>
-
-            {/* 4. TRIP STYLE RADIO */}
-            <div>
-              <label className="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">
-                4. Gaya & Kelas Trip
+              <label className="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">
+                2. Durasi Perjalanan
               </label>
-              <div className="space-y-2">
+              <div className="grid grid-cols-3 gap-3">
                 {[
-                  { id: "opentrip", title: "🎒 Open Trip Budget", desc: "Sharing group, hemat & ekonomis" },
-                  { id: "family", title: "👨‍👩‍👧‍👦 Family Private Trip", desc: "Unit eksklusif, driver & hotel *3" },
-                  { id: "luxury", title: "👑 Private Luxury VIP", desc: "Armada VIP, hotel *4, makan & dokumentasi" },
-                ].map((style) => (
-                  <label
-                    key={style.id}
-                    onClick={() => setTripStyle(style.id as any)}
-                    className={`flex items-start gap-3 p-3 rounded-2xl border cursor-pointer transition-all ${
-                      tripStyle === style.id
-                        ? "bg-brand-orange/5 border-brand-orange ring-1 ring-brand-orange/30"
-                        : "bg-slate-50 border-slate-200 hover:bg-slate-100"
+                  { label: "9 Hari (Reguler)", val: "9Hari" },
+                  { label: "12 Hari (Plus)", val: "12Hari" },
+                  { label: "16 Hari (Ramadan)", val: "16Hari" }
+                ].map((item) => (
+                  <button
+                    key={item.val}
+                    onClick={() => setDuration(item.val)}
+                    className={`py-3 px-3 rounded-2xl text-xs font-bold transition-all border ${
+                      duration === item.val
+                        ? "bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 border-amber-300 shadow-md"
+                        : "bg-white/5 border-white/10 text-stone-300 hover:border-amber-500/40"
                     }`}
                   >
-                    <input
-                      type="radio"
-                      name="tripStyle"
-                      checked={tripStyle === style.id}
-                      onChange={() => {}}
-                      className="mt-1 accent-brand-orange"
-                    />
-                    <div>
-                      <span className="block text-xs font-bold text-brand-dark">{style.title}</span>
-                      <span className="block text-[11px] text-slate-500">{style.desc}</span>
-                    </div>
-                  </label>
+                    {item.label}
+                  </button>
                 ))}
               </div>
             </div>
 
+            {/* 3. KATEGORI LAYANAN */}
+            <div>
+              <label className="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">
+                3. Tipe Kategori Akomodasi
+              </label>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { label: "Bintang 5 Standar", val: "reguler" },
+                  { label: "Bintang 5 Family", val: "family" },
+                  { label: "VIP 0 Meter Haram", val: "vip" }
+                ].map((item) => (
+                  <button
+                    key={item.val}
+                    onClick={() => setTripStyle(item.val as any)}
+                    className={`py-3 px-3 rounded-2xl text-xs font-bold transition-all border ${
+                      tripStyle === item.val
+                        ? "bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 border-amber-300 shadow-md"
+                        : "bg-white/5 border-white/10 text-stone-300 hover:border-amber-500/40"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 4. JUMLAH JAMAAH */}
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                  4. Jumlah Jamaah (Orang)
+                </label>
+                <span className="text-sm font-extrabold text-amber-300">{passengers} Jamaah</span>
+              </div>
+              <input
+                type="range"
+                min={1}
+                max={20}
+                value={passengers}
+                onChange={(e) => setPassengers(parseInt(e.target.value))}
+                className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-amber-400"
+              />
+            </div>
           </div>
 
-          {/* RIGHT COLUMN: AI INSTANT OUTPUT CARD */}
-          <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-brand-orange/30 flex flex-col justify-between space-y-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-gradient-to-l from-brand-orange/10 to-transparent w-48 h-48 rounded-bl-full pointer-events-none" />
+          {/* CALCULATION RESULT DISPLAY PANEL */}
+          <div className="lg:col-span-5 bg-gradient-to-b from-[#24201B] to-[#161411] border border-amber-500/30 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative">
+            <div className="flex items-center justify-between border-b border-amber-500/20 pb-4">
+              <div className="flex items-center gap-2">
+                <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
+                <span className="font-nunito font-bold text-sm text-white">Estimasi Paket Soraya Tour</span>
+              </div>
+              <span className="text-[10px] font-bold text-amber-400 bg-amber-500/20 px-2.5 py-1 rounded-full border border-amber-500/30">
+                AI Verified
+              </span>
+            </div>
 
             <div>
-              {/* OUTPUT TITLE BAR */}
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4 mb-6">
-                <div>
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-widest text-brand-orange">
-                    <BadgeCheck className="h-3.5 w-3.5" /> Hasil Rekomendasi AI Instan
-                  </span>
-                  <h4 className="text-xl sm:text-2xl font-extrabold text-brand-dark font-nunito mt-0.5">
-                    Paket {destination} ({duration})
-                  </h4>
-                </div>
-
-                <div className="bg-brand-cream px-3.5 py-1.5 rounded-2xl border border-brand-orange/20 text-right">
-                  <span className="text-[10px] text-slate-500 font-semibold block uppercase">Armada Rekomendasi</span>
-                  <span className="text-xs font-extrabold text-brand-orange flex items-center gap-1">
-                    <Car className="h-3.5 w-3.5" /> {tripCalculation.recommendedVehicle}
-                  </span>
-                </div>
+              <span className="text-xs text-stone-400 block font-light">Estimasi Total Biaya ({passengers} Jamaah)</span>
+              <div className="text-3xl sm:text-4xl font-extrabold text-amber-300 mt-1 font-nunito tracking-tight">
+                Rp {tripCalculation.totalPrice.toLocaleString("id-ID")}
               </div>
+              <span className="text-xs text-stone-300 mt-1 block">
+                (Sekitar Rp {tripCalculation.pricePerPerson.toLocaleString("id-ID")} / jamaah)
+              </span>
+            </div>
 
-              {/* PRICING BREAKDOWN BANNER */}
-              <div className="bg-brand-dark text-white rounded-2xl p-5 mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4 shadow-md">
-                <div>
-                  <span className="text-[10px] text-white/70 font-semibold uppercase block">Estimasi Per Orang</span>
-                  <span className="text-lg font-extrabold text-white">
-                    Rp {tripCalculation.pricePerPerson.toLocaleString("id-ID")}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-white/70 font-semibold uppercase block">Total Biaya ({passengers} Orang)</span>
-                  <span className="text-lg font-extrabold text-brand-orange-light">
-                    Rp {tripCalculation.totalPrice.toLocaleString("id-ID")}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-white/70 font-semibold uppercase block">DP Wajib (30%)</span>
-                  <span className="text-lg font-extrabold text-emerald-400">
-                    Rp {tripCalculation.downPayment.toLocaleString("id-ID")}
-                  </span>
-                </div>
+            <div className="space-y-3 bg-black/40 p-4 rounded-2xl border border-amber-500/20 text-xs">
+              <div className="flex justify-between">
+                <span className="text-stone-400">Rekomendasi Hotel:</span>
+                <span className="font-semibold text-amber-300 text-right max-w-[200px]">{tripCalculation.hotelRecommendation}</span>
               </div>
-
-              {/* DAY BY DAY RUNDOWN PREVIEW */}
-              <div className="space-y-4 mb-6">
-                <h5 className="text-xs font-bold text-brand-dark uppercase tracking-wider flex items-center gap-1.5">
-                  <Calendar className="h-4 w-4 text-brand-orange" />
-                  Pratinjau Jadwal & Itinerary Interaktif
-                </h5>
-
-                <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1">
-                  {tripCalculation.dayByDay.map((day, idx) => (
-                    <div key={idx} className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="px-2 py-0.5 rounded-md bg-brand-orange text-white font-extrabold text-[10px]">
-                          {day.day}
-                        </span>
-                        <span className="text-xs font-bold text-brand-dark">{day.title}</span>
-                      </div>
-                      <ul className="space-y-1 pl-1">
-                        {day.activities.map((act, aIdx) => (
-                          <li key={aIdx} className="text-[11px] text-slate-600 flex items-start gap-1.5">
-                            <span className="text-brand-orange font-bold">•</span> {act}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
+              <div className="flex justify-between">
+                <span className="text-stone-400">Uang Muka (DP 20%):</span>
+                <span className="font-bold text-amber-400">Rp {tripCalculation.downPayment.toLocaleString("id-ID")}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-stone-400">Penerbangan:</span>
+                <span className="font-semibold text-emerald-400">Direct Flight Garuda / Saudia</span>
               </div>
             </div>
 
             {/* ACTION BUTTONS */}
-            <div className="pt-2 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-3 pt-2">
               <button
-                type="button"
-                onClick={handleBookingWA}
-                className="inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-2xl bg-brand-orange hover:bg-brand-orange-light text-white text-xs font-bold transition-all shadow-md shadow-brand-orange/25 cursor-pointer"
+                onClick={handleBookWhatsApp}
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-600 hover:from-amber-300 hover:to-yellow-500 text-stone-950 font-extrabold text-sm shadow-xl shadow-amber-500/20 flex items-center justify-center gap-2 transition-all"
               >
                 <MessageSquare className="h-4 w-4" />
-                <span>Booking Hasil AI via WA</span>
+                <span>Konsultasi & Booking via WhatsApp</span>
               </button>
 
               <button
-                type="button"
-                onClick={handleDownloadPdf}
+                onClick={handleDownloadPDF}
                 disabled={isGeneratingPdf}
-                className="inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-2xl bg-brand-dark hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-md cursor-pointer disabled:opacity-50"
+                className="w-full py-3 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-amber-500/30 flex items-center justify-center gap-2 transition-all disabled:opacity-50"
               >
-                <Download className="h-4 w-4 text-brand-orange-light" />
-                <span>{isGeneratingPdf ? "Menyiapkan PDF..." : "Download E-Itinerary PDF Resmi"}</span>
+                <Download className="h-4 w-4 text-amber-400" />
+                <span>{isGeneratingPdf ? "Menyiapkan PDF Brosur..." : "Download PDF Itinerary Brosur"}</span>
               </button>
             </div>
-
           </div>
 
         </div>
-
       </div>
     </section>
   );

@@ -40,19 +40,19 @@ export default function LokasiPage() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-orange/10 font-sans text-xs font-bold tracking-widest text-brand-orange uppercase">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 font-sans text-xs font-bold tracking-widest text-amber-600 uppercase border border-amber-500/30">
             <BadgeCheck className="h-3.5 w-3.5" />
-            HUBUNGI KAMI & LOKASI
+            HUBUNGI KAMI & ALAMAT
           </span>
 
           <h1 
             id="contact-title" 
             className="text-3xl sm:text-4xl font-extrabold text-brand-dark mt-3 font-nunito"
           >
-            Kontak Mustika Travel
+            Kontak Soraya Tour
           </h1>
           <p className="text-base text-brand-dark/70 mt-4 font-light leading-relaxed">
-            Kami siap melayani kebutuhan transportasi, rental mobil, dan paket tour Anda 24 jam nonstop. Hubungi kami melalui kontak di bawah ini.
+            Tim konsultan ibadah Soraya Tour siap melayani pendaftaran Umroh & Haji Khusus 24 jam. Hubungi kami melalui kontak di bawah ini.
           </p>
         </motion.div>
 
@@ -103,8 +103,8 @@ export default function LokasiPage() {
                   <div>
                     <h3 className="font-bold text-brand-dark text-sm">Email Resmi</h3>
                     <p className="text-sm text-brand-dark/70 mt-1 font-medium">
-                      <a href="mailto:info@mustikatravel.com" className="hover:text-brand-orange transition-colors">
-                        info@mustikatravel.com
+                      <a href="mailto:info@sorayatour.com" className="hover:text-brand-orange transition-colors">
+                        info@sorayatour.com
                       </a>
                     </p>
                   </div>
