@@ -81,7 +81,7 @@ export default function Navbar() {
             <div className="relative h-11 w-11 shrink-0 overflow-hidden flex items-center justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/Asset/SORAYA_LOGO_V2.png"
+                src="/Asset/SORAYA_LOGO_V3.png"
                 alt="Soraya Tour Logo"
                 className="h-full w-full object-contain filter drop-shadow-sm bg-transparent group-hover:rotate-6 transition-transform duration-300"
               />
@@ -197,7 +197,7 @@ export default function Navbar() {
                   <div className="relative h-10 w-10 shrink-0 overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src="/Asset/SORAYA_LOGO_V2.png"
+                      src="/Asset/SORAYA_LOGO_V3.png"
                       alt="Soraya Tour Logo"
                       className="h-full w-full object-contain bg-transparent"
                     />

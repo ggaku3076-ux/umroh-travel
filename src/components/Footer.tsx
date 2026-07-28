@@ -17,7 +17,7 @@ export default function Footer() {
               <div className="relative h-10 w-10 shrink-0 overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/Asset/SORAYA_LOGO_V2.png"
+                  src="/Asset/SORAYA_LOGO_V3.png"
                   alt="Soraya Tour Logo"
                   className="h-full w-full object-contain bg-transparent"
                 />
@@ -87,7 +87,7 @@ export default function Footer() {
                 <div className="relative h-12 w-12 shrink-0 overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/Asset/SORAYA_LOGO_V2.png"
+                    src="/Asset/SORAYA_LOGO_V3.png"
                     alt="Soraya Tour Logo"
                     className="h-full w-full object-contain bg-transparent"
                   />
