@@ -46,6 +46,29 @@ export default function AdminDashboardPage() {
     setTimeout(() => setSuccessToast(""), 3000);
   };
 
+  const handleFileUpload = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    onSuccess: (base64Url: string) => void
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Ukuran foto maksimal 5MB!");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      if (result) {
+        onSuccess(result);
+        showSuccess("Foto dari galeri HP/PC berhasil di-upload!");
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#0E0C0A] flex items-center justify-center p-4">
@@ -230,14 +253,27 @@ export default function AdminDashboardPage() {
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-stone-300 mb-2">URL Foto Banner Desktop</label>
-                <input
-                  type="text"
-                  value={content.heroBgImage}
-                  onChange={(e) => updateContent({ heroBgImage: e.target.value })}
-                  className="w-full px-4 py-3 bg-stone-950 border border-stone-800 rounded-xl text-sm text-white focus:border-amber-500"
-                />
+              <div className="md:col-span-2">
+                <label className="block text-xs font-semibold text-stone-300 mb-2">Foto Banner Banner Utama</label>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="text"
+                    value={content.heroBgImage}
+                    onChange={(e) => updateContent({ heroBgImage: e.target.value })}
+                    placeholder="/Asset/BACKGROUND_MEKKAH_DESKTOP_V2.webp"
+                    className="flex-grow px-4 py-3 bg-stone-950 border border-stone-800 rounded-xl text-sm text-amber-300 focus:border-amber-500"
+                  />
+                  <label htmlFor="hero-bg-file" className="cursor-pointer px-4 py-3 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                    <ImageIcon className="h-4 w-4" /> 📁 Pilih Foto dari HP / PC
+                  </label>
+                  <input
+                    id="hero-bg-file"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleFileUpload(e, (url) => updateContent({ heroBgImage: url }))}
+                  />
+                </div>
               </div>
             </div>
 
@@ -328,13 +364,25 @@ export default function AdminDashboardPage() {
                       </div>
 
                       <div>
-                        <label className="block text-[11px] text-stone-400 mb-1 font-semibold">URL Foto Destinasi</label>
-                        <input
-                          type="text"
-                          value={paket.imagePath}
-                          onChange={(e) => updatePaketItem(paket.id, { imagePath: e.target.value })}
-                          className="w-full px-3 py-2 bg-stone-950 border border-stone-800 rounded-xl text-xs text-amber-300 focus:border-amber-500"
-                        />
+                        <label className="block text-[11px] text-stone-400 mb-1 font-semibold">Foto Destinasi (URL / Upload Galeri)</label>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={paket.imagePath}
+                            onChange={(e) => updatePaketItem(paket.id, { imagePath: e.target.value })}
+                            className="flex-grow px-3 py-2 bg-stone-950 border border-stone-800 rounded-xl text-xs text-amber-300 focus:border-amber-500"
+                          />
+                          <label htmlFor={`file-pkt-${paket.id}`} className="cursor-pointer px-3 py-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-xl text-[11px] font-bold whitespace-nowrap flex items-center gap-1">
+                            <ImageIcon className="h-3.5 w-3.5" /> 📁 Pilih Foto
+                          </label>
+                          <input
+                            id={`file-pkt-${paket.id}`}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleFileUpload(e, (url) => updatePaketItem(paket.id, { imagePath: url }))}
+                          />
+                        </div>
                       </div>
 
                       <div>
@@ -388,13 +436,25 @@ export default function AdminDashboardPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-300 mb-1">URL Foto (PNG/WebP/JPG)</label>
-                  <input
-                    type="text"
-                    value={newPaket.imagePath}
-                    onChange={(e) => setNewPaket({ ...newPaket, imagePath: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-stone-950 border border-stone-800 rounded-xl text-xs text-amber-300"
-                  />
+                  <label className="block text-xs font-semibold text-stone-300 mb-1">Foto Paket Baru</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newPaket.imagePath}
+                      onChange={(e) => setNewPaket({ ...newPaket, imagePath: e.target.value })}
+                      className="flex-grow px-3 py-2.5 bg-stone-950 border border-stone-800 rounded-xl text-xs text-amber-300"
+                    />
+                    <label htmlFor="new-paket-file" className="cursor-pointer px-3 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1">
+                      <ImageIcon className="h-3.5 w-3.5" /> 📁 Pilih
+                    </label>
+                    <input
+                      id="new-paket-file"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => handleFileUpload(e, (url) => setNewPaket({ ...newPaket, imagePath: url }))}
+                    />
+                  </div>
                 </div>
               </div>
 
