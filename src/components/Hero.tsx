@@ -1,8 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Compass, Camera, Map, ArrowRight, ShieldCheck, BadgeCheck, Award, Star } from "lucide-react";
+import { useAdminContent } from "@/context/AdminContentContext";
 
 export default function Hero() {
+  const { content } = useAdminContent();
+
   return (
     <section 
       id="beranda" 
@@ -12,8 +17,8 @@ export default function Hero() {
       {/* BACKGROUND IMAGES */}
       <div className="absolute inset-0 hidden lg:block z-0" aria-hidden="true">
         <Image
-          src="/Asset/BACKGROUND_MEKKAH_DESKTOP_V2.webp"
-          alt="Soraya Tour Umroh Background"
+          src={content.heroBgImage || "/Asset/BACKGROUND_MEKKAH_DESKTOP_V2.webp"}
+          alt={`${content.brandName} Umroh Background`}
           fill
           priority
           sizes="100vw"
@@ -22,8 +27,8 @@ export default function Hero() {
       </div>
       <div className="absolute inset-0 block lg:hidden z-0" aria-hidden="true">
         <Image
-          src="/Asset/BACKGROUND_MEKKAH_MOBILE_V2.webp"
-          alt="Soraya Tour Umroh Background Mobile"
+          src={content.heroBgImage || "/Asset/BACKGROUND_MEKKAH_MOBILE_V2.webp"}
+          alt={`${content.brandName} Umroh Background Mobile`}
           fill
           priority
           sizes="100vw"
@@ -40,7 +45,7 @@ export default function Hero() {
           {/* FLOATING BADGE */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-amber-400/50 text-xs font-bold text-amber-300 tracking-wide shadow-lg shadow-amber-500/10">
             <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400 shrink-0" />
-            <span>Soraya Tour — Travel Haji & Umroh VIP Bintang 5</span>
+            <span>{content.heroBadge}</span>
           </div>
           
           {/* MAIN HEADING */}
@@ -48,15 +53,15 @@ export default function Hero() {
             id="hero-title" 
             className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.15] font-sans drop-shadow-md"
           >
-            Ibadah Khusyu & Perjalanan Suci <br className="hidden sm:inline" />
+            {content.heroTitle} <br className="hidden sm:inline" />
             <span className="bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent font-black drop-shadow-lg">
-              Bersama Soraya Tour.
+              Bersama {content.brandName}.
             </span>
           </h1>
 
           {/* SUBTITLE */}
           <p className="text-sm sm:text-base text-stone-200 leading-relaxed max-w-lg font-light drop-shadow-sm">
-            Wujudkan impian ibadah Umroh & Haji Anda dengan bimbingan ustaz mutawwif berpengalaman, hotel bintang 5 terdekat Masjidil Haram & Nabawi, serta kepastian keberangkatan resmi.
+            {content.heroSubtitle}
           </p>
 
           {/* ACTION BUTTONS */}

@@ -44,6 +44,7 @@ export const metadata: Metadata = {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Chatbot from "@/components/Chatbot";
+import { AdminContentProvider } from "@/context/AdminContentContext";
 
 export default function RootLayout({
   children,
@@ -60,10 +61,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="flex min-h-full flex-col font-sans bg-[#0E0C0A] text-white antialiased selection:bg-amber-500/30 selection:text-amber-300">
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
-        <Chatbot />
+        <AdminContentProvider>
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+          <Chatbot />
+        </AdminContentProvider>
       </body>
     </html>
   );

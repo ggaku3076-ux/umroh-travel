@@ -151,6 +151,7 @@ export default function Footer() {
             <div className="flex gap-4">
               <Link href="#" className="hover:text-amber-300">Syarat & Ketentuan</Link>
               <Link href="#" className="hover:text-amber-300">Kebijakan Privasi</Link>
+              <Link href="/admin" className="text-amber-400 font-semibold hover:underline">🔐 Mode Admin CMS</Link>
             </div>
           </div>
         </div>

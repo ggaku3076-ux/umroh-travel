@@ -4,63 +4,18 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, Compass, Check, ArrowRight, BadgeCheck } from "lucide-react";
-
-interface PaketTour {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  duration: string;
-  description: string;
-  imagePath: string;
-  features: string[];
-  isPopular?: boolean;
-}
+import { useAdminContent } from "@/context/AdminContentContext";
 
 export default function PaketSection() {
+  const { content } = useAdminContent();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const paketList: PaketTour[] = [
-    {
-      id: "pkg-1",
-      name: "Paket Umroh Reguler VIP Bintang 5",
-      category: "umroh",
-      price: 28500000,
-      duration: "9 Hari",
-      description: "Perjalanan ibadah khusyu ke Makkah & Madinah dengan hotel bintang 5 persis di depan Masjidil Haram & Masjid Nabawi.",
-      imagePath: "/Asset/UMROH_REGULER.webp",
-      features: ["Hotel Bintang 5 Depan Masjid", "Penerbangan Direct Saudia Airlines", "Kereta Cepat Haramain Makkah-Madinah", "Pembimbing Mutawwif Sesuai Sunnah"],
-      isPopular: true,
-    },
-    {
-      id: "pkg-2",
-      name: "Paket Haji Khusus Furoda VIP",
-      category: "haji",
-      price: 165000000,
-      duration: "25 Hari",
-      description: "Ibadah Haji Khusus Furoda resmi tanpa antre dengan fasilitas tenda VIP Maktab Arafah-Mina dan hotel bintang 5.",
-      imagePath: "/Asset/HAJI_FURODA.webp",
-      features: ["Visa Haji Furoda Resmi Tanpa Antre", "Tenda VIP Maktab Arafah & Mina", "Hotel PullMan Zamzam Makkah", "Pendampingan Dokter & Ustaz 24 Jam"],
-      isPopular: true,
-    },
-    {
-      id: "pkg-3",
-      name: "Paket Umroh Plus Turki & Bosphorus",
-      category: "umroh",
-      price: 36500000,
-      duration: "12 Hari",
-      description: "Ziarah suci Makkah Madinah dikombinasikan dengan wisata sejarah ke keindahan Hagia Sophia & Selat Bosphorus Istanbul.",
-      imagePath: "/Asset/UMROH_PLUS_TURKI.webp",
-      features: ["City Tour Hagia Sophia & Bosphorus", "Hotel Bintang 5 Makkah & Madinah", "Perlengkapan Umroh Exclusive", "Air Zam-zam 5 Liter & Full Maskapai VIP"],
-    },
-  ];
-
   const filteredPaket = useMemo(() => {
-    return paketList.filter((item) => {
+    return content.paketList.filter((item) => {
       return item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
              item.description.toLowerCase().includes(searchQuery.toLowerCase());
     });
-  }, [searchQuery]);
+  }, [searchQuery, content.paketList]);
 
   return (
     <section className="py-24 bg-brand-cream relative overflow-hidden">
@@ -73,7 +28,7 @@ export default function PaketSection() {
             Layanan Ibadah VIP
           </span>
 
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark mt-3 font-nunito">Paket Umroh & Haji Soraya Tour</h2>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark mt-3 font-nunito">Paket Umroh & Haji {content.brandName}</h2>
           <p className="text-stone-600 mt-4 text-base font-light leading-relaxed">
             Pilihan paket ibadah Umroh Reguler, Umroh Plus Turki/Aqsa, dan Haji Khusus dengan pelayanan Bintang 5 terpercaya.
           </p>
